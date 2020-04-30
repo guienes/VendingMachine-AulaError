@@ -4,11 +4,13 @@ class VendingMachineProduct {
     var name: String
     var amount: Int
     var price: Double
+    var cartao: String
     
-    init(name: String, amount: Int, price: Double) {
+    init(name: String, amount: Int, price: Double, cartao: String) {
         self.name = name
         self.amount = amount
         self.price = price
+        self.cartao = cartao
     }
 }
 
@@ -34,7 +36,8 @@ extension VendingMachineError: LocalizedError {
     }
 }
 
-class VendingMachine {
+public class VendingMachine {
+    public var teste = 0
     private var estoque: [VendingMachineProduct]
     private var money: Double
     
@@ -55,6 +58,7 @@ class VendingMachine {
         
         guard produto.price <= self.money else { throw VendingMachineError.insufficientFunds }
         
+        
         self.money -= produto.price
         produto.amount -= 1
         
@@ -69,21 +73,25 @@ class VendingMachine {
         
         return money
     }
-}
 
+}
 let vendingMachine = VendingMachine(products: [
-    VendingMachineProduct(name: "Carregador de iPhone", amount: 5, price: 150.00),
-    VendingMachineProduct(name: "Funnions", amount: 2, price: 7.00),
-    VendingMachineProduct(name: "Xiaomi Umbrella", amount: 5, price: 125.00),
-    VendingMachineProduct(name: "Trator", amount: 1, price: 75000.00)
+    VendingMachineProduct(name: "Carregador de iPhone", amount: 5, price: 150.00, cartao: "Debito"),
+    VendingMachineProduct(name: "Funnions", amount: 2, price: 7.00, cartao: "Credito"),
+    VendingMachineProduct(name: "Xiaomi Umbrella", amount: 5, price: 125.00, cartao: "Credito"),
+    VendingMachineProduct(name: "Trator", amount: 1, price: 75000.00, cartao: "Debito"),
+    VendingMachineProduct(name: "MesaGamer", amount: 2, price: 7.00, cartao: "Debito")
 ])
 
 do {
-    try vendingMachine.getProduct(named: "Funnions", with: 0.0)
-    try vendingMachine.getProduct(named: "Umbrella", with: 140.0)
-    print("deu bom")
+    try vendingMachine.getProduct(named: "MesaGamer", with: 15.0)
+    try vendingMachine.getProduct(named: "Trator", with: 140.0)
+    print("Parabéns")
 } catch VendingMachineError.produtcStuck {
     print("Pedimos desculpas, mas houve um problema, o seu produto ficou preso.")
 } catch {
     print(error.localizedDescription)
 }
+
+
+
